@@ -15,12 +15,19 @@ public class JdbcProductInfoRepository implements ProductInfoRepository {
 		this.jdbcTemplate=jdbcTemplate;
 	}
 	
-	public ProductInfo save(ProductInfo productInfo) {
+	public int save(ProductInfo productInfo) {
+		System.out.println("Calling DB to insert the ProductInfo");
 		String insertPrepareStatement="insert into requestinfo(RequestId,ProductId,RequestedDate) values(?,?,curdate())";
-		jdbcTemplate.update(insertPrepareStatement,
+		int rows =jdbcTemplate.update(insertPrepareStatement,
 				1,productInfo.getProductId());
 		
-		return productInfo;
+		return rows;
 	}
+
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
+	
+	
 
 }

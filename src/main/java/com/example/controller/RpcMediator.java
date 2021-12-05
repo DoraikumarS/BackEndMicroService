@@ -10,11 +10,13 @@ import org.apache.xmlrpc.XmlRpcRequestConfig;
 import org.apache.xmlrpc.client.XmlRpcClient;
 import org.apache.xmlrpc.client.XmlRpcClientConfigImpl;
 import org.apache.xmlrpc.client.XmlRpcClientRequestImpl;
+import org.springframework.stereotype.Component;
 
 import com.example.model.RequestMSTwo;
 import com.example.model.RequestToMediator;
 import com.example.model.ResponseMSTwo;
 
+@Component
 public class RpcMediator {
 
 	public ResponseMSTwo processRequest(RequestMSTwo requestMSTwo) throws MalformedURLException, XmlRpcException {
@@ -24,12 +26,8 @@ public class RpcMediator {
 		requestToMediator.setTokenToValidate(requestMSTwo.getTokenToValidate());
 		requestToMediator.setIsValidToken(Boolean.toString(isValidToken));
 		
-		XmlRpcClientConfigImpl xmlRpcClientConfigImpl = new XmlRpcClientConfigImpl();
-		xmlRpcClientConfigImpl.setServerURL(new URL("http://localhost:8084"));
 		
-		XmlRpcClient xmlRpcClient = new XmlRpcClient();
-		xmlRpcClient.setConfig(xmlRpcClientConfigImpl);
-		
+		XmlRpcClient xmlRpcClient = getXmlRpcClient();
 		Object resultMessage = xmlRpcClient.execute("rpc_server.greetingMessage", Arrays.asList(30));
 		
 		System.out.println("resultMessage is " + resultMessage.toString());
@@ -37,6 +35,16 @@ public class RpcMediator {
 		responseMSTwo.setRequestMSTwo(requestMSTwo);
 		responseMSTwo.setItemDescription(resultMessage.toString());
 		return responseMSTwo;
+	}
+	
+	public XmlRpcClient getXmlRpcClient() throws MalformedURLException {
+		XmlRpcClientConfigImpl xmlRpcClientConfigImpl = new XmlRpcClientConfigImpl();
+		xmlRpcClientConfigImpl.setServerURL(new URL("http://localhost:8084"));
+		
+		XmlRpcClient xmlRpcClient = new XmlRpcClient();
+		xmlRpcClient.setConfig(xmlRpcClientConfigImpl);
+		
+		return xmlRpcClient;
 	}
 	
 	private boolean validateToken(String token) {

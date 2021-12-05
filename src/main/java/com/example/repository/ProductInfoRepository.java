@@ -6,6 +6,6 @@ import com.example.demo.ProductInfo;
 
 public interface ProductInfoRepository {
 	
-	ProductInfo save(ProductInfo productInfo);
+	int save(ProductInfo productInfo);
 
 }

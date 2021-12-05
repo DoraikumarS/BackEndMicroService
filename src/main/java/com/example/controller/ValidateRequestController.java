@@ -3,6 +3,7 @@ package com.example.controller;
 import java.net.MalformedURLException;
 
 import org.apache.xmlrpc.XmlRpcException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,7 +20,10 @@ import com.example.repository.ProductInfoRepository;
 @RestController
 public class ValidateRequestController {
 
-	private ProductInfoRepository productInfoRepository;
+	@Autowired
+	public RpcMediator rpcMediator;
+	
+	public ProductInfoRepository productInfoRepository;
 	
 	public ValidateRequestController(ProductInfoRepository productInfoRepository) {
 		this.productInfoRepository=productInfoRepository;
@@ -32,7 +36,7 @@ public class ValidateRequestController {
 		
 		ResponseMSTwo responseMSTwo = new ResponseMSTwo();
 		responseMSTwo.setRequestMSTwo(requestMSTwo);
-		RpcMediator rpcMediator = new RpcMediator();
+		//RpcMediator rpcMediator = new RpcMediator();
 		try {
 			responseMSTwo=rpcMediator.processRequest(requestMSTwo);
 			
